@@ -23,11 +23,10 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         try {
-            $user = User::where('email', $request->email)
-                ->orWhere('username', $request->email)
+            $user = User::where('no_hp', $request->no_hp)
                 ->first();
 
-            if (!$user || !Hash::check($request->password, $user->password) || !$user->email_verified_at) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
                 throw ValidationException::withMessages(['message' => 'Invalid Credentials']);
             }
 
@@ -39,7 +38,7 @@ class AuthController extends Controller
 
             return ResponseFormatter::success(
                 [
-                    // 'user' => UserResources::make($user),
+                    'user' => UserResources::make($user),
                     'access_token' => $accessToken,
                     'token_type' => 'Bearer',
                 ],
@@ -58,6 +57,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         try {
+            $request['password'] = bcrypt($request->tanggal_lahir);
             $user = User::create($request->all());
             event(new Registered($user));
             $accessToken = $user->createToken(
@@ -67,7 +67,7 @@ class AuthController extends Controller
             )->plainTextToken;
             return ResponseFormatter::success(
                 [
-                    // 'user' => UserResources::make($user),
+                    'user' => UserResources::make($user),
                     'access_token' => $accessToken,
                     'token_type' => 'Bearer',
                 ],
@@ -84,7 +84,6 @@ class AuthController extends Controller
             $status = Password::sendResetLink(
                 $request->only('email')
             );
-
             if ($status != Password::RESET_LINK_SENT) {
                 throw ValidationException::withMessages([
                     'email' => [__($status)],
@@ -95,6 +94,7 @@ class AuthController extends Controller
             return ResponseFormatter::error(
                 [
                     'message' => $validationError->getMessage(),
+                    'code' => JsonResponse::HTTP_BAD_REQUEST
                 ],
                 'Reset Password Failed'
             );
