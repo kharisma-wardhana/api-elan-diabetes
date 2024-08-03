@@ -19,5 +19,6 @@ class Nakes extends Model
         'foto',
         'posisi',
         'wa',
+        'status',
     ];
 }

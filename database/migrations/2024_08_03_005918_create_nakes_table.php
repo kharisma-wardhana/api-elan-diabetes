@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('foto');
             $table->string('posisi');
             $table->string('wa');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
