@@ -4,33 +4,29 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseFormatter;
-use App\Models\Artikel;
+use App\Models\Kalori;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ArtikelController extends Controller
+class KaloriController extends Controller
 {
     public function index(): JsonResponse
     {
         try {
-            $articles = Artikel::orderBy('created_at', 'desc')->get();
+            $calories = Kalori::get();
             return ResponseFormatter::success(
-                ['list' => $articles],
-                'Successfully Get All Artikel'
+                ["list" => $calories],
+                "Successfully Get List Kalori"
             );
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }
     }
 
-
-    public function show(Artikel $article): JsonResponse
+    public function show(Kalori $kalori): JsonResponse
     {
         try {
-            return ResponseFormatter::success(
-                $article,
-                'Successfully Get Detail Artikel'
-            );
+            return ResponseFormatter::success($kalori, "Successfully Get Detail Kalori");
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }

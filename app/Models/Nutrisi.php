@@ -20,4 +20,9 @@ class Nutrisi extends Model
         'tanggal',
         'type',
     ];
+
+    public function kalori()
+    {
+        return $this->belongsTo(Kalori::class, 'kaloris_id');
+    }
 }

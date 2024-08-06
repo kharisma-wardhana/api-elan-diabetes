@@ -6,36 +6,59 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseFormatter;
 use App\Http\Requests\AddWaterRequest;
 use App\Models\KonsumsiAir;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class KonsumsiAirController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(User $user, Request $request): JsonResponse
     {
-        $waters = KonsumsiAir::where('users_id', 1)->get();
+        $month = $request->get('month');
+        $year = $request->get('year');
+
+        // Format the month and year for comparison
+        $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT); // Ensure month is two digits
+        $startDate = "$year-$monthFormatted-01"; // Start of the month
+        $endDate = Carbon::parse($startDate)->endOfMonth()->format('Y-m-d'); // End of the month
+        $startDateFormatted = Carbon::parse($startDate)->format('Y-m-d');
+        $endDateFormatted = Carbon::parse($endDate)->format('Y-m-d');
+
+        // Query data based on the formatted dates
+        $waters = KonsumsiAir::where('users_id', $user->id)
+            ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
+            ->get();
+
         return ResponseFormatter::success(
             ['list' => $waters],
-            'Successfully Get Data Konsumsi Air',
+            'Successfully Get List Konsumsi Air',
         );
     }
 
     public function store(AddWaterRequest $request): JsonResponse
     {
-        $water = KonsumsiAir::create($request->all());
-        return ResponseFormatter::success(
-            $water,
-            'Successfully Add Konsumsi Air'
-        );
+        try {
+            $water = KonsumsiAir::create($request->all());
+            return ResponseFormatter::success(
+                $water,
+                'Successfully Add Konsumsi Air'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
     }
 
     public function update(KonsumsiAir $water, Request $request): JsonResponse
     {
-        $water->update($request->all());
-        return ResponseFormatter::success(
-            $water,
-            'Successfully Updated Konsumsi Air'
-        );
+        try {
+            $water->update($request->all());
+            return ResponseFormatter::success(
+                $water,
+                'Successfully Updated Konsumsi Air'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
     }
-
 }

@@ -10,14 +10,18 @@ use Illuminate\Http\Request;
 
 class NakesController extends Controller
 {
-    public function index():JsonResponse 
+    public function index(): JsonResponse
     {
-        $doctors = Nakes::where('status', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return ResponseFormatter::success(
-            ['list' => $doctors],
-            'Successfully Get All Nakes'
-        );
+        try {
+            $doctors = Nakes::where('status', 1)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            return ResponseFormatter::success(
+                ['list' => $doctors],
+                'Successfully Get All Nakes'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
     }
 }

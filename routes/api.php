@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Assesment\KolesterolController;
 use App\Http\Controllers\Api\Assesment\KonsumsiAirController;
 use App\Http\Controllers\Api\Assesment\TekananDarahController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\KaloriController;
 use App\Http\Controllers\Api\NakesController;
 use App\Http\Controllers\Api\NutrisiController;
 use App\Http\Controllers\Api\ObatController;
@@ -32,22 +33,28 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::prefix('/users/{user}')->group(function () {
+        Route::apiResources([
+            '/medicines' => ObatController::class,
+            '/nutritions' => NutrisiController::class,
+            // Assesment
+            '/assesments' => AssesmentController::class,
+            '/anthropometrics' => AntropometriController::class,
+            '/activities' => AktifitasController::class,
+            '/blood-sugars' => GulaDarahController::class,
+            '/gouts' => AsamUratController::class,
+            '/cholesterols' => KolesterolController::class,
+            '/hbs' => HbController::class,
+            '/blood-pressures' => TekananDarahController::class,
+            '/waters' => KonsumsiAirController::class,
+            '/kidneys' => GinjalController::class,
+        ]);
+    });
+
     Route::apiResources([
-        '/medicines' => ObatController::class,
         '/doctors' => NakesController::class,
         '/videos' => VideoController::class,
         '/articles' => ArtikelController::class,
-        '/nutritions' => NutrisiController::class,
-        // Assesment
-        '/assesments' => AssesmentController::class,
-        '/anthropometrics' => AntropometriController::class,
-        '/activities' => AktifitasController::class,
-        '/blood-sugars' => GulaDarahController::class,
-        '/gouts' => AsamUratController::class,
-        '/cholesterols' => KolesterolController::class,
-        '/hbs' => HbController::class,
-        '/blood-pressures' => TekananDarahController::class,
-        '/waters' => KonsumsiAirController::class,
-        '/kidneys' => GinjalController::class,
+        '/calories' => KaloriController::class,
     ]);
 });
