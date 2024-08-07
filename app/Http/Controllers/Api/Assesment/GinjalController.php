@@ -32,7 +32,7 @@ class GinjalController extends Controller
 
             return ResponseFormatter::success(
                 ["list" => $data],
-                'Successfully List Tekanan Darah'
+                'Successfully List Ginjal'
             );
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
