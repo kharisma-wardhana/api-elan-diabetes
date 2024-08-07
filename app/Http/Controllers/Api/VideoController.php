@@ -10,21 +10,30 @@ use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
-    public function index() :JsonResponse
+    public function index(): JsonResponse
     {
-        $videos = Video::orderBy('created_at', 'desc')->get();
-        return ResponseFormatter::success(
-            ['list' => $videos],
-            'Successfully Get All Video'
-        );
+
+        try {
+            $videos = Video::orderBy('created_at', 'desc')->get();
+            return ResponseFormatter::success(
+                ['list' => $videos],
+                'Successfully Get All Video'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
     }
 
 
-    public function show(Video $video):JsonResponse
+    public function show(Video $video): JsonResponse
     {
-        return ResponseFormatter::success(
-            $video,
-            'Successfully Get Detail Video'
-        );
+        try {
+            return ResponseFormatter::success(
+                $video,
+                'Successfully Get Detail Video'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
     }
 }
