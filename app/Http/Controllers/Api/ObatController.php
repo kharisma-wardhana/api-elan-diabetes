@@ -7,6 +7,7 @@ use App\Http\Helpers\ResponseFormatter;
 use App\Http\Requests\AddObatRequest;
 use App\Models\Obat;
 use App\Models\User;
+use App\Models\UserObat;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,7 +28,8 @@ class ObatController extends Controller
             $endDateFormatted = Carbon::parse($endDate)->format('Y-m-d');
 
             // Query data based on the formatted dates
-            $obats = Obat::where('users_id', $user->id)
+            $obats = UserObat::with('obat')
+                ->where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
 
@@ -37,11 +39,22 @@ class ObatController extends Controller
         }
     }
 
-    public function store(AddObatRequest $request): JsonResponse
+    public function store(User $user, AddObatRequest $request): JsonResponse
     {
         try {
-            $obat = Obat::create($request->all());
-            return ResponseFormatter::success($obat, "Successfully Get List Obat");
+            $obat = Obat::create([
+                'nama' => $request->get('nama'),
+                'dosis' => $request->get('dosis'),
+                'durasi' => $request->get('durasi'),
+                'type' => $request->get('type'),
+            ]);
+            $userObat = UserObat::create([
+                'users_id' => $user->id,
+                'obats_id' => $obat->id,
+                'jam' => $request->get('jam'),
+                'tanggal' => $request->get('tanggal'),
+            ]);
+            return ResponseFormatter::success($userObat, "Successfully Add Obat");
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }

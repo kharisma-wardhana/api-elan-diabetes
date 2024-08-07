@@ -15,9 +15,15 @@ class UserObat extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'users_id',
         'obats_id',
         'jam',
         'tanggal',
         'status',
     ];
+
+    public function obat()
+    {
+        return $this->belongsTo(Obat::class, 'obats_id');
+    }
 }

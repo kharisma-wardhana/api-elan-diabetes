@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('obats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained('users');
             $table->string('nama');
             $table->integer('dosis');
             $table->integer('durasi')->comment('durasi minum obat dalam hari')->default(1);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Assesment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseFormatter;
+use App\Http\Requests\AddGulaDarahRequest;
 use App\Models\GulaDarah;
 use App\Models\User;
 use Carbon\Carbon;
@@ -26,13 +27,35 @@ class GulaDarahController extends Controller
             $endDateFormatted = Carbon::parse($endDate)->format('Y-m-d');
 
             // Query data based on the formatted dates
-            $bloods = GulaDarah::where('users_id', $user->id)
+            $data = GulaDarah::where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
 
             return ResponseFormatter::success(
-                ["list" => $bloods],
+                ["list" => $data],
                 'Successfully List Gula Darah'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
+    }
+
+    public function store(User $user, AddGulaDarahRequest $request): JsonResponse
+    {
+        try {
+            $existingData = GulaDarah::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->where('jam', $request->get('jam'))
+                ->first();
+            if ($existingData != null) {
+                $existingData->update($request->all());
+                $data = $existingData;
+            } else {
+                $data = GulaDarah::create($request->all());
+            }
+            return ResponseFormatter::success(
+                $data,
+                $existingData ? 'Successfully Update Gula Darah' : 'Successfully Add Gula Darah'
             );
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());

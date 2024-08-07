@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_obats', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('users_id')->constrained('users');
             $table->foreignId('obats_id')->constrained('obats');
             $table->string('jam');
             $table->string('tanggal')->comment('dd-mm-YYYY');
