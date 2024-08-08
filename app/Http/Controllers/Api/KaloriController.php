@@ -23,6 +23,16 @@ class KaloriController extends Controller
         }
     }
 
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $kalori = Kalori::create($request->all());
+            return ResponseFormatter::success($kalori, "Successfully Add Kalori");
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
+    }
+
     public function show(Kalori $kalori): JsonResponse
     {
         try {
