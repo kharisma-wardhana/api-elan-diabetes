@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Nakes extends Model
 {
@@ -21,4 +22,12 @@ class Nakes extends Model
         'wa',
         'status',
     ];
+
+    public function getFotoAttribute($value)
+    {
+        if (!$value) {
+            throw new \Exception("File path is empty or invalid.");
+        }
+        return url(Storage::url($value));
+    }
 }
