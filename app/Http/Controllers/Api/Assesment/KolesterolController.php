@@ -42,8 +42,9 @@ class KolesterolController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
+            $data = Kolesterol::create($request->all());
             return ResponseFormatter::success(
-                "",
+                $data,
                 'Successfully Add Kolesterol'
             );
         } catch (\Exception $error) {

@@ -42,8 +42,9 @@ class AsamUratController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
+            $data = AsamUrat::create($request->all());
             return ResponseFormatter::success(
-                "",
+                $data,
                 'Successfully Add Asam Urat'
             );
         } catch (\Exception $error) {

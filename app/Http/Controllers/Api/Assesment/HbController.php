@@ -42,8 +42,9 @@ class HbController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
+            $data = HbA1c::create($request->all());
             return ResponseFormatter::success(
-                "",
+                $data,
                 'Successfully Add Tekanan Darah'
             );
         } catch (\Exception $error) {

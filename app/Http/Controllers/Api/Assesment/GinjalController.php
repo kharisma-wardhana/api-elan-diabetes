@@ -42,8 +42,9 @@ class GinjalController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
+            $data = Ginjal::create($request->all());
             return ResponseFormatter::success(
-                "",
+                $data,
                 'Successfully Add Ginjal'
             );
         } catch (\Exception $error) {

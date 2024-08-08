@@ -42,8 +42,9 @@ class TekananDarahController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
+            $data = TekananDarah::create($request->all());
             return ResponseFormatter::success(
-                "",
+                $data,
                 'Successfully Add Tekanan Darah'
             );
         } catch (\Exception $error) {
