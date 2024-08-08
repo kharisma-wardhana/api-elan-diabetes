@@ -45,7 +45,7 @@ class KonsumsiAirController extends Controller
         try {
             $oldData = KonsumsiAir::where('users_id', $request->get('users_id'))
                 ->where('tanggal', $request->get('tanggal'))
-                ->get();
+                ->first();
             if ($oldData != null) {
                 $totalAir = $oldData->jumlah + $request->get('jumlah');
                 $water = $oldData->update([
