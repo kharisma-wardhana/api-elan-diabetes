@@ -50,7 +50,10 @@ class NutrisiController extends Controller
                 ->orderBy('tanggal', 'desc')
                 ->orderBy('type', 'asc')
                 ->get();
-            return ResponseFormatter::success($nutritions, "Successfully Add Nutrisi");
+            return ResponseFormatter::success(
+                ["list" => $nutritions],
+                "Successfully Add Nutrisi"
+            );
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }
