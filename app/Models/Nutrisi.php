@@ -16,8 +16,9 @@ class Nutrisi extends Model
      */
     protected $fillable = [
         'users_id',
-        'kaloris_id',
+        'nama',
         'tanggal',
+        'jumlah_kalori',
         'type',
     ];
 
