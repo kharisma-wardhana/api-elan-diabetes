@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('nutrisis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->constrained('users');
-            $table->foreignId('kaloris_id')->constrained('kaloris');
             $table->string('tanggal')->comment('dd-mm-YYYY');
+            $table->string('nama');
+            $table->int('jumlah_kalori');
             $table->tinyInteger('type')->comment('0: Pagi, 1: Siang, 2: Malam');
             $table->timestamps();
         });

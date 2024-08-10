@@ -23,8 +23,9 @@ class AddNutrisiRequest extends FormRequest
     {
         return [
             'users_id' => ['required'],
-            'kaloris_id' => ['required'],
             'tanggal' => ['required'],
+            'nama' => ['required'],
+            'jumlah_kalori' => ['required'],
             'type' => ['required'],
         ];
     }
