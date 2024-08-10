@@ -26,11 +26,8 @@ class NutrisiController extends Controller
             $startDateFormatted = Carbon::parse($startDate)->format('Y-m-d');
             $endDateFormatted = Carbon::parse($endDate)->format('Y-m-d');
 
-            $nutritions = Nutrisi::select('tanggal', 'type', 'kaloris.jenis', 'kaloris.jumlah_kalori')
-                ->join('kaloris', 'nutrisis.kaloris_id', '=', 'kaloris.id')
-                ->where('users_id', $user->id)
+            $nutritions = Nutrisi::where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
-                ->groupBy('tanggal', 'type', 'kaloris.jenis', 'kaloris.jumlah_kalori')
                 ->orderBy('tanggal', 'desc')
                 ->orderBy('type', 'asc')
                 ->get();
