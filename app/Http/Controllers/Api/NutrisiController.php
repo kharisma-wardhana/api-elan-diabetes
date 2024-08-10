@@ -45,8 +45,12 @@ class NutrisiController extends Controller
     public function store(AddNutrisiRequest $request): JsonResponse
     {
         try {
-            $nutrisi = Nutrisi::create($request->all());
-            return ResponseFormatter::success($nutrisi, "Successfully Add Nutrisi");
+            Nutrisi::create($request->all());
+            $nutritions = Nutrisi::where('users_id', $request->get("users_id"))
+                ->orderBy('tanggal', 'desc')
+                ->orderBy('type', 'asc')
+                ->get();
+            return ResponseFormatter::success($nutritions, "Successfully Add Nutrisi");
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }
