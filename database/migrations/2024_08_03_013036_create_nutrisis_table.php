@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('users_id')->constrained('users');
             $table->string('tanggal')->comment('dd-mm-YYYY');
             $table->string('nama');
-            $table->int('jumlah_kalori');
+            $table->integer('jumlah_kalori');
             $table->tinyInteger('type')->comment('0: Pagi, 1: Siang, 2: Malam');
             $table->timestamps();
         });
