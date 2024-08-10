@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Artikel extends Model
 {
@@ -20,4 +21,12 @@ class Artikel extends Model
         'content',
         'audio',
     ];
+
+    public function getImageAttribute($value)
+    {
+        if (!$value) {
+            throw new \Exception("File path is empty or invalid.");
+        }
+        return url(Storage::url($value));
+    }
 }

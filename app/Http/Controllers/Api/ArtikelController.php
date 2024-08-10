@@ -7,6 +7,7 @@ use App\Http\Helpers\ResponseFormatter;
 use App\Models\Artikel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ArtikelController extends Controller
 {
@@ -30,6 +31,39 @@ class ArtikelController extends Controller
             return ResponseFormatter::success(
                 $article,
                 'Successfully Get Detail Artikel'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            // Check if validation fails
+            if ($validator->fails()) {
+                return ResponseFormatter::clientError($validator->errors() . 'Failed Add File Image');
+            }
+
+            // Handle the file upload
+            if ($request->file('image')) {
+                $file = $request->file('image');
+                $path = $file->store('uploads', 'public');
+            }
+
+            $article = Artikel::create([
+                'judul' => $request->get('judul'),
+                'content' => $request->get('content'),
+                'image' => $path,
+            ]);
+
+            return ResponseFormatter::success(
+                $article,
+                'Successfully Add Artikel'
             );
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
