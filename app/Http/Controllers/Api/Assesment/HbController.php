@@ -50,10 +50,13 @@ class HbController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
-            $data = HbA1c::create($request->all());
+            HbA1c::create($request->all());
+            $data = HbA1c::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->get();
             return ResponseFormatter::success(
-                $data,
-                'Successfully Add Tekanan Darah'
+                ['list' => $data],
+                'Successfully Add Hb1ac'
             );
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
