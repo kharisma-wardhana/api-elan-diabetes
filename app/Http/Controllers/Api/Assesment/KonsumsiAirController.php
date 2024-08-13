@@ -18,6 +18,8 @@ class KonsumsiAirController extends Controller
         try {
             $month = $request->get('month');
             $year = $request->get('year');
+            $date = $request->get('date');
+            $dateFormatted = Carbon::parse($date)->format('Y-m-d');
 
             // Format the month and year for comparison
             $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT); // Ensure month is two digits

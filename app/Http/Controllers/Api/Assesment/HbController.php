@@ -17,6 +17,8 @@ class HbController extends Controller
         try {
             $month = $request->get('month');
             $year = $request->get('year');
+            $date = $request->get('date');
+            $dateFormatted = Carbon::parse($date)->format('Y-m-d');
 
             // Format the month and year for comparison
             $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT); // Ensure month is two digits
@@ -29,6 +31,12 @@ class HbController extends Controller
             $data = HbA1c::where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
+
+            if (isset($date)) {
+                $data = HbA1c::where('users_id', $user->id)
+                    ->where('tanggal', $dateFormatted)
+                    ->get();
+            }
 
             return ResponseFormatter::success(
                 ["list" => $data],

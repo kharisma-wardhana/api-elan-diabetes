@@ -17,6 +17,7 @@ class TekananDarahController extends Controller
         try {
             $month = $request->get('month');
             $year = $request->get('year');
+            $date = $request->get('date');
 
             // Format the month and year for comparison
             $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT); // Ensure month is two digits
@@ -24,14 +25,21 @@ class TekananDarahController extends Controller
             $endDate = Carbon::parse($startDate)->endOfMonth()->format('Y-m-d'); // End of the month
             $startDateFormatted = Carbon::parse($startDate)->format('Y-m-d');
             $endDateFormatted = Carbon::parse($endDate)->format('Y-m-d');
+            $dateFormatted = Carbon::parse($date)->format('Y-m-d');
 
             // Query data based on the formatted dates
-            $bloodp = TekananDarah::where('users_id', $user->id)
+            $data = TekananDarah::where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
 
+            if (isset($date)) {
+                $data = TekananDarah::where('users_id', $user->id)
+                    ->where('tanggal', $dateFormatted)
+                    ->get();
+            }
+
             return ResponseFormatter::success(
-                ["list" => $bloodp],
+                ["list" => $data],
                 'Successfully List Tekanan Darah'
             );
         } catch (\Exception $error) {
