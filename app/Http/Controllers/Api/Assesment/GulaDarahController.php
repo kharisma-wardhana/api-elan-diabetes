@@ -62,7 +62,9 @@ class GulaDarahController extends Controller
                 $data = GulaDarah::create($request->all());
             }
             return ResponseFormatter::success(
-                $data,
+                ['list' => GulaDarah::where('users_id', $user->id)
+                    ->where('tanggal', $request->get('tanggal'))
+                    ->get()],
                 $existingData ? 'Successfully Update Gula Darah' : 'Successfully Add Gula Darah'
             );
         } catch (\Exception $error) {

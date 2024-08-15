@@ -33,6 +33,12 @@ class KonsumsiAirController extends Controller
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
 
+            if (isset($date)) {
+                $waters = KonsumsiAir::where('users_id', $user->id)
+                    ->where('tanggal', $dateFormatted)
+                    ->get();
+            }
+
             return ResponseFormatter::success(
                 ['list' => $waters],
                 'Successfully Get List Konsumsi Air',
@@ -57,7 +63,9 @@ class KonsumsiAirController extends Controller
                 $water = KonsumsiAir::create($request->all());
             }
             return ResponseFormatter::success(
-                $water,
+                ['list' => KonsumsiAir::where('users_id', $user->id)
+                    ->where('tanggal', $request->get('tanggal'))
+                    ->get()],
                 'Successfully Add Konsumsi Air'
             );
         } catch (\Exception $error) {
