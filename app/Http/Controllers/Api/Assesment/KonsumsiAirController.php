@@ -63,7 +63,7 @@ class KonsumsiAirController extends Controller
                 $water = KonsumsiAir::create($request->all());
             }
             return ResponseFormatter::success(
-                ['list' => KonsumsiAir::where('users_id', $user->id)
+                ['list' => KonsumsiAir::where('users_id', $request->get('users_id'))
                     ->where('tanggal', $request->get('tanggal'))
                     ->get()],
                 'Successfully Add Konsumsi Air'
