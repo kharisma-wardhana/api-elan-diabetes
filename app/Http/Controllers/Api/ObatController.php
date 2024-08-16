@@ -19,6 +19,8 @@ class ObatController extends Controller
         try {
             $month = $request->get('month');
             $year = $request->get('year');
+            $date = $request->get('date');
+            $dateFormatted = Carbon::parse($date)->format('Y-m-d');
 
             // Format the month and year for comparison
             $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT); // Ensure month is two digits
@@ -32,6 +34,12 @@ class ObatController extends Controller
                 ->where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
+
+            if (isset($date)) {
+                $obats = UserObat::where('users_id', $user->id)
+                    ->where('tanggal', $dateFormatted)
+                    ->get();
+            }
 
             return ResponseFormatter::success(["list" => $obats], "Successfully Get List Obat");
         } catch (\Exception $error) {
@@ -48,13 +56,18 @@ class ObatController extends Controller
                 'durasi' => $request->get('durasi'),
                 'type' => $request->get('type'),
             ]);
-            $userObat = UserObat::create([
+            UserObat::create([
                 'users_id' => $user->id,
                 'obats_id' => $obat->id,
                 'jam' => $request->get('jam'),
                 'tanggal' => $request->get('tanggal'),
             ]);
-            return ResponseFormatter::success($userObat, "Successfully Add Obat");
+
+            $obats = UserObat::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->get();
+
+            return ResponseFormatter::success(['list' => $obats], "Successfully Add Obat");
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }
