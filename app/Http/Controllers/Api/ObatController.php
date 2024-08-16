@@ -30,8 +30,7 @@ class ObatController extends Controller
             $endDateFormatted = Carbon::parse($endDate)->format('Y-m-d');
 
             // Query data based on the formatted dates
-            $obats = UserObat::with('obat')
-                ->where('users_id', $user->id)
+            $obats = UserObat::where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
                 ->get();
 
@@ -50,15 +49,11 @@ class ObatController extends Controller
     public function store(User $user, AddObatRequest $request): JsonResponse
     {
         try {
-            $obat = Obat::create([
-                'nama' => $request->get('nama'),
-                'dosis' => $request->get('dosis'),
-                'durasi' => $request->get('durasi'),
-                'type' => $request->get('type'),
-            ]);
             UserObat::create([
                 'users_id' => $user->id,
-                'obats_id' => $obat->id,
+                'nama' => $request->get('nama'),
+                'dosis' => $request->get('dosis'),
+                'type' => $request->get('type'),
                 'jam' => $request->get('jam'),
                 'tanggal' => $request->get('tanggal'),
             ]);

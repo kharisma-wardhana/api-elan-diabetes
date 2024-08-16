@@ -16,14 +16,11 @@ class UserObat extends Model
      */
     protected $fillable = [
         'users_id',
-        'obats_id',
+        'nama',
+        'dosis',
+        'type',
         'jam',
         'tanggal',
         'status',
     ];
-
-    public function obat()
-    {
-        return $this->belongsTo(Obat::class, 'obats_id');
-    }
 }

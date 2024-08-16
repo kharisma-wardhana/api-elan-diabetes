@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('user_obats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->constrained('users');
-            $table->foreignId('obats_id')->constrained('obats');
+            $table->string('nama');
+            $table->integer('dosis');
+            $table->integer('type');
             $table->string('jam');
             $table->string('tanggal')->comment('dd-mm-YYYY');
             $table->tinyInteger('status')->comment('0: Terlewat, 1: Sudah Diminum')->nullable();
