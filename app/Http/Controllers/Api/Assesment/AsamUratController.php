@@ -50,7 +50,15 @@ class AsamUratController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
-            AsamUrat::create($request->all());
+            $existingData = AsamUrat::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->first();
+            if ($existingData != null) {
+                $existingData->update($request->all());
+            } else {
+                AsamUrat::create($request->all());
+            }
+
             $data = AsamUrat::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
                 ->get();

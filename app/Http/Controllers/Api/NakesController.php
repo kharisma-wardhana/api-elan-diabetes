@@ -17,7 +17,7 @@ class NakesController extends Controller
     {
         try {
             $doctors = Nakes::where('status', 1)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->get();
             return ResponseFormatter::success(
                 ['list' => $doctors],

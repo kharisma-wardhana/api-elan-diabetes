@@ -50,7 +50,14 @@ class HbController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
-            HbA1c::create($request->all());
+            $existingData = HbA1c::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->first();
+            if ($existingData != null) {
+                $existingData->update($request->all());
+            } else {
+                HbA1c::create($request->all());
+            }
             $data = HbA1c::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
                 ->get();

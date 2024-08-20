@@ -50,7 +50,15 @@ class GinjalController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
-            Ginjal::create($request->all());
+            $existingData = Ginjal::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->where('type', $request->get('type'))
+                ->first();
+            if ($existingData != null) {
+                $existingData->update($request->all());
+            } else {
+                Ginjal::create($request->all());
+            }
             $data = Ginjal::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
                 ->get();

@@ -50,7 +50,14 @@ class KolesterolController extends Controller
     public function store(User $user, Request $request): JsonResponse
     {
         try {
-            Kolesterol::create($request->all());
+            $existingData = Kolesterol::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->first();
+            if ($existingData != null) {
+                $existingData->update($request->all());
+            } else {
+                Kolesterol::create($request->all());
+            }
             $data = Kolesterol::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
                 ->get();

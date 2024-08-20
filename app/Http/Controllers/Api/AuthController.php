@@ -106,7 +106,9 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $token = $request->user()->currentAccessToken()->delete();
-        return ResponseFormatter::success($token ? "Successfully Logout" : "Failed Logout", 'Token Revoked');
+        return ResponseFormatter::success(
+            $token ? "Successfully Logout" : "Failed Logout",
+            'Token Revoked'
+        );
     }
-
 }
