@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('users_id')->constrained('users');
             $table->string('nama');
-            $table->integer('dosis');
+            $table->string('dosis');
             $table->integer('type');
             $table->string('tanggal')->comment('dd-mm-YYYY');
             $table->tinyInteger('status')->comment('0: Terlewat, 1: Sudah Diminum')->nullable();
