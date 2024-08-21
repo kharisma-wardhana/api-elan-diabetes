@@ -19,7 +19,6 @@ class UserObat extends Model
         'nama',
         'dosis',
         'type',
-        'jam',
         'tanggal',
         'status',
     ];

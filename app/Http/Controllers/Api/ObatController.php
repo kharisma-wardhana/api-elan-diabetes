@@ -49,14 +49,18 @@ class ObatController extends Controller
     public function store(User $user, AddObatRequest $request): JsonResponse
     {
         try {
-            UserObat::create([
-                'users_id' => $user->id,
-                'nama' => $request->get('nama'),
-                'dosis' => $request->get('dosis'),
-                'type' => $request->get('type'),
-                'jam' => $request->get('jam'),
-                'tanggal' => $request->get('tanggal'),
-            ]);
+            $durasi = $request->get('durasi');
+            $date = Carbon::parse($request->get('tanggal'));
+            for ($i = 0; $i < $durasi; $i++) {
+                UserObat::create([
+                    'users_id' => $user->id,
+                    'nama' => $request->get('nama'),
+                    'dosis' => $request->get('dosis'),
+                    'type' => $request->get('type'),
+                    'tanggal' => $date->addDay()->format('Y-m-d'),
+                ]);
+            }
+
 
             $obats = UserObat::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
