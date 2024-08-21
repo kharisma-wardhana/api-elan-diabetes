@@ -57,7 +57,7 @@ class ObatController extends Controller
                     'nama' => $request->get('nama'),
                     'dosis' => $request->get('dosis'),
                     'type' => $request->get('type'),
-                    'tanggal' => $date->addDay()->format('Y-m-d'),
+                    'tanggal' => $i == 0 ? $date->format('Y-m-d') : $date->addDay()->format('Y-m-d'),
                 ]);
             }
 
