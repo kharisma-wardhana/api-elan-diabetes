@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseFormatter;
 use App\Http\Requests\AddNutrisiRequest;
+use App\Http\Resources\ResponseNutrisi;
 use App\Models\Nutrisi;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,7 +26,7 @@ class NutrisiController extends Controller
                 ->get();
 
             return ResponseFormatter::success(
-                ['list' => $nutritions],
+                new ResponseNutrisi($nutritions),
                 'Successfully Get List Nutrisi'
             );
         } catch (\Exception $error) {
@@ -34,7 +35,7 @@ class NutrisiController extends Controller
     }
 
 
-    public function store(AddNutrisiRequest $request): JsonResponse
+    public function store(User $user, AddNutrisiRequest $request): JsonResponse
     {
         try {
             Nutrisi::create($request->all());
@@ -43,7 +44,7 @@ class NutrisiController extends Controller
                 ->orderBy('type', 'asc')
                 ->get();
             return ResponseFormatter::success(
-                ["list" => $nutritions],
+                new ResponseNutrisi($nutritions),
                 "Successfully Add Nutrisi"
             );
         } catch (\Exception $error) {
