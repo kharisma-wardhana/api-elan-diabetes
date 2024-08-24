@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class AntropometriController extends Controller
 {
+
+    public function show(Antropometri $anthropometric): JsonResponse
+    {
+        try {
+            return ResponseFormatter::success($anthropometric, "Successfully Get Antropometri");
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
+    }
+
     public function store(Request $request): JsonResponse
     {
         try {

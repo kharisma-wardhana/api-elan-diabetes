@@ -19,6 +19,7 @@ return new class extends Migration
             $table->double('lingkar_perut');
             $table->double('lingkar_lengan');
             $table->double('hasil');
+            $table->string('jenis_aktivitas');
             $table->tinyInteger('status')->comment('0: Kurus, 1: Normal, 2: Obesitas');
             $table->timestamps();
         });

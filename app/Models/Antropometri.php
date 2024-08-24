@@ -20,6 +20,7 @@ class Antropometri extends Model
         'berat',
         'lingkar_perut',
         'lingkar_lengan',
+        'jenis_aktivitas',
         'hasil',
         'status',
     ];
