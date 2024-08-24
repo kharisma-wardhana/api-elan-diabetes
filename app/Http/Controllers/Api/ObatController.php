@@ -71,4 +71,20 @@ class ObatController extends Controller
             return ResponseFormatter::serverError(message: $error->getMessage());
         }
     }
+
+    public function update(User $user, UserObat $medicine, Request $request): JsonResponse
+    {
+        try {
+            $medicine->update([
+                'status' => $request->get('status')
+            ]);
+            $obats = UserObat::where('users_id', $user->id)
+                ->where('tanggal', $medicine->tanggal)
+                ->get();
+
+            return ResponseFormatter::success(['list' => $obats], "Successfully Update Status Obat");
+        } catch (\Exception $error) {
+            return ResponseFormatter::serverError(message: $error->getMessage());
+        }
+    }
 }
