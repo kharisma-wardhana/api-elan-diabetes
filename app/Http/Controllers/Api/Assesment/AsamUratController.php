@@ -35,6 +35,7 @@ class AsamUratController extends Controller
             if (isset($date)) {
                 $data = AsamUrat::where('users_id', $user->id)
                     ->where('tanggal', $dateFormatted)
+                    ->limit(5)
                     ->get();
             }
 
@@ -61,6 +62,7 @@ class AsamUratController extends Controller
 
             $data = AsamUrat::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
+                ->limit(5)
                 ->get();
             return ResponseFormatter::success(
                 ['list' => $data],

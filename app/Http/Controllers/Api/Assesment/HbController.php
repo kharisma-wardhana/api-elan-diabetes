@@ -35,6 +35,7 @@ class HbController extends Controller
             if (isset($date)) {
                 $data = HbA1c::where('users_id', $user->id)
                     ->where('tanggal', $dateFormatted)
+                    ->limit(5)
                     ->get();
             }
 
@@ -60,6 +61,7 @@ class HbController extends Controller
             }
             $data = HbA1c::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
+                ->limit(5)
                 ->get();
             return ResponseFormatter::success(
                 ['list' => $data],

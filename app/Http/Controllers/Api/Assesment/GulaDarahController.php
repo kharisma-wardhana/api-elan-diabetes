@@ -36,6 +36,7 @@ class GulaDarahController extends Controller
             if (isset($date)) {
                 $data = GulaDarah::where('users_id', $user->id)
                     ->where('tanggal', $dateFormatted)
+                    ->limit(5)
                     ->get();
             }
 
@@ -64,6 +65,7 @@ class GulaDarahController extends Controller
             return ResponseFormatter::success(
                 ['list' => GulaDarah::where('users_id', $user->id)
                     ->where('tanggal', $request->get('tanggal'))
+                    ->limit(5)
                     ->get()],
                 $existingData ? 'Successfully Update Gula Darah' : 'Successfully Add Gula Darah'
             );

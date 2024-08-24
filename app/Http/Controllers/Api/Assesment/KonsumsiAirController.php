@@ -65,6 +65,7 @@ class KonsumsiAirController extends Controller
             return ResponseFormatter::success(
                 ['list' => KonsumsiAir::where('users_id', $request->get('users_id'))
                     ->where('tanggal', $request->get('tanggal'))
+                    ->limit(5)
                     ->get()],
                 'Successfully Add Konsumsi Air'
             );

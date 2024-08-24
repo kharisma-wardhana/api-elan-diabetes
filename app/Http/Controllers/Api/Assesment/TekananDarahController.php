@@ -35,6 +35,7 @@ class TekananDarahController extends Controller
             if (isset($date)) {
                 $data = TekananDarah::where('users_id', $user->id)
                     ->where('tanggal', $dateFormatted)
+                    ->limit(5)
                     ->get();
             }
 
@@ -53,6 +54,7 @@ class TekananDarahController extends Controller
             TekananDarah::create($request->all());
             $data = TekananDarah::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
+                ->limit(5)
                 ->get();
             return ResponseFormatter::success(
                 ['list' => $data],

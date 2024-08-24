@@ -18,6 +18,8 @@ class AktifitasController extends Controller
         try {
             $month = $request->get('month');
             $year = $request->get('year');
+            $date = $request->get('date');
+            $dateFormatted = Carbon::parse($date)->format('Y-m-d');
 
             // Format the month and year for comparison
             $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT); // Ensure month is two digits
@@ -28,9 +30,16 @@ class AktifitasController extends Controller
 
             $data = Aktifitas::where('users_id', $user->id)
                 ->whereRaw("STR_TO_DATE(tanggal, '%Y-%m-%d') BETWEEN ? AND ?", [$startDateFormatted, $endDateFormatted])
+                ->limit(5)
                 ->orderBy('tanggal', 'desc')
                 ->get();
 
+            if (isset($date)) {
+                $data = Aktifitas::where('users_id', $user->id)
+                    ->where('tanggal', $dateFormatted)
+                    ->limit(5)
+                    ->get();
+            }
             return ResponseFormatter::success(
                 ['list' => $data],
                 'Successfully Get List Aktfitas'
@@ -40,12 +49,16 @@ class AktifitasController extends Controller
         }
     }
 
-    public function store(AddAktifitasRequest $request): JsonResponse
+    public function store(User $user, AddAktifitasRequest $request): JsonResponse
     {
         try {
-            $aktifitas = Aktifitas::create($request->all());
+            Aktifitas::create($request->all());
+            $data = Aktifitas::where('users_id', $user->id)
+                ->where('tanggal', $request->get('tanggal'))
+                ->limit(5)
+                ->get();
             return ResponseFormatter::success(
-                $aktifitas,
+                ['list' => $data],
                 'Successfully Add Aktfitas'
             );
         } catch (\Exception $error) {

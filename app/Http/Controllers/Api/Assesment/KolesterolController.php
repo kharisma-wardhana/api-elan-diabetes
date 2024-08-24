@@ -35,6 +35,7 @@ class KolesterolController extends Controller
             if (isset($date)) {
                 $data = Kolesterol::where('users_id', $user->id)
                     ->where('tanggal', $dateFormatted)
+                    ->limit(5)
                     ->get();
             }
 
@@ -60,6 +61,7 @@ class KolesterolController extends Controller
             }
             $data = Kolesterol::where('users_id', $user->id)
                 ->where('tanggal', $request->get('tanggal'))
+                ->limit(5)
                 ->get();
             return ResponseFormatter::success(
                 ['list' => $data],
