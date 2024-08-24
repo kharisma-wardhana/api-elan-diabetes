@@ -15,7 +15,7 @@ class AntropometriController extends Controller
     {
         try {
             $anthropometric  = Antropometri::where('users_id', $user->id)->first();
-            return ResponseFormatter::success($anthropometric, "Successfully Get Antropometri");
+            return ResponseFormatter::success($anthropometric != null ? $anthropometric : [], "Successfully Get Antropometri");
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
         }
