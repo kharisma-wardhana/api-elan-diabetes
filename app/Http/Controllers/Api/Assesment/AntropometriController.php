@@ -14,7 +14,7 @@ class AntropometriController extends Controller
     public function index(User $user, Request $request): JsonResponse
     {
         try {
-            $anthropometric  = Antropometri::where('users_id', $user->id)->get();
+            $anthropometric  = Antropometri::where('users_id', $user->id)->first();
             return ResponseFormatter::success($anthropometric, "Successfully Get Antropometri");
         } catch (\Exception $error) {
             return ResponseFormatter::serverError(message: $error->getMessage());
