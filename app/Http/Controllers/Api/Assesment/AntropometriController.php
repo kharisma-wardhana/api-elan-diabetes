@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api\Assesment;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseFormatter;
 use App\Models\Antropometri;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AntropometriController extends Controller
 {
 
-    public function show(Antropometri $anthropometric): JsonResponse
+    public function show(User $user, Antropometri $anthropometric): JsonResponse
     {
         try {
             return ResponseFormatter::success($anthropometric, "Successfully Get Antropometri");
