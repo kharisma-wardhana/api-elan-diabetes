@@ -57,7 +57,8 @@ class KonsumsiAirController extends Controller
             if ($oldData != null) {
                 $totalAir = $oldData->jumlah + $request->get('jumlah');
                 $water = $oldData->update([
-                    'jumlah' => $totalAir
+                    'jumlah' => $totalAir,
+                    'target' => $request->get('target'),
                 ]);
             } else {
                 $water = KonsumsiAir::create($request->all());
