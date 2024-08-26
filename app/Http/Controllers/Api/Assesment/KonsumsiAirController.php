@@ -79,7 +79,8 @@ class KonsumsiAirController extends Controller
         try {
             $totalAir = $water->jumlah + $request->get('jumlah');
             $water->update([
-                'jumlah' => $totalAir
+                'jumlah' => $totalAir,
+                'target' => $request->get('target')
             ]);
             return ResponseFormatter::success(
                 $water,
