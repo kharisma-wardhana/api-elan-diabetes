@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 
 class AddWaterRequest extends FormRequest
 {
@@ -22,9 +25,26 @@ class AddWaterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tanggal'=> ['required'],
+            'tanggal' => ['required'],
             'target' => ['required'],
             'jumlah' => ['required'],
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+        $errorMessage = implode(' ', $errors->all());
+        $customResponse = [
+            'meta' => [
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'status' => 'error',
+                'message' => $errorMessage,
+            ],
+            'data' => null,
+            'errors' => $errors,
+        ];
+
+        throw new HttpResponseException(response()->json($customResponse, JsonResponse::HTTP_BAD_REQUEST));;
     }
 }

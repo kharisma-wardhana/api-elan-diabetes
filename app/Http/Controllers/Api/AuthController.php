@@ -74,7 +74,7 @@ class AuthController extends Controller
                 'Successfully Register New User'
             );
         } catch (\Exception $error) {
-            return ResponseFormatter::serverError(null, $error->getMessage());
+            return ResponseFormatter::serverError(message: $error->getMessage());
         }
     }
 
@@ -99,7 +99,7 @@ class AuthController extends Controller
                 'Reset Password Failed'
             );
         } catch (\Exception $error) {
-            return ResponseFormatter::serverError(null, $error->getMessage());
+            return ResponseFormatter::serverError(message: $error->getMessage());
         }
     }
 
